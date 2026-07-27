@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CNHWELBG5F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CNHWELBG5F');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact HKB Group — Book a Strategy Call</title>
@@ -549,6 +559,11 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--brass); }
 .form-group textarea { resize: vertical; min-height: 120px; }
 .form-note { font-size: 0.82rem; color: var(--graphite-dim); margin-top: 0.5rem; }
+.form-error { display: none; font-size: 0.82rem; color: var(--signal); margin-top: 0.75rem; }
+.form-error.is-visible { display: block; }
+.form-error a { color: var(--signal); text-decoration: underline; }
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.btn[disabled] { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
 .form-success { display: none; text-align: center; padding: 2.5rem 1rem; }
 .form-success.is-visible { display: block; }
 .form-success .check-big { width: 56px; height: 56px; border-radius: 50%; background: var(--brass-soft); color: var(--brass); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 1.5rem; }
@@ -589,8 +604,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 <!--
   HKB Group — Contact page
   Replace before launch:
-   - #contactForm is client-side only — it shows a success message on submit but does not actually
-     send anywhere yet. Wire it to a form backend (e.g. Formspree, Web3Forms, Netlify Forms) before launch.
+   - #contactForm now submits to Web3Forms (see action attribute + fetch handler below).
    - social links (currently "#")
    - see index.html's top comment for other site-wide placeholders
 -->
@@ -631,17 +645,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
     <a href="about.html">About</a>
   </nav>
   <a href="contact.html" class="btn btn-primary">Book a Call</a>
-  <div class="mobile-menu-footer">
-    <a href="#" class="social-icon" aria-label="LinkedIn">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="4"/><line x1="7.5" y1="10" x2="7.5" y2="17"/><circle cx="7.5" cy="7" r="0.6" fill="currentColor" stroke="none"/><path d="M12 17v-4.5c0-1.4 1-2.5 2.4-2.5s2.4 1.1 2.4 2.5V17"/><line x1="12" y1="10" x2="12" y2="17"/></svg>
-    </a>
-    <a href="#" class="social-icon" aria-label="X (Twitter)">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
-    </a>
-    <a href="#" class="social-icon" aria-label="Instagram">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="0.6" fill="currentColor" stroke="none"/></svg>
-    </a>
-  </div>
 </div>
 
 <main>
@@ -664,7 +667,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
       <div class="contact-grid">
 
         <div class="contact-form-wrap reveal">
-          <form id="contactForm">
+          <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="e908aa84-baef-4d1b-8e13-02e193aa9fdf">
+            <input type="hidden" name="subject" value="New inquiry from the HKB Group website">
+            <input type="checkbox" name="botcheck" class="hp-field" tabindex="-1" autocomplete="off">
             <div class="form-row">
               <div class="form-group">
                 <label for="cf-name">Name</label>
@@ -697,19 +703,19 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
             </div>
             <button type="submit" class="btn btn-primary btn-lg">Send Message <span class="link-arrow">→</span></button>
             <p class="form-note">We reply within one business day. No spam, no auto-drip sequence.</p>
+            <p class="form-error" id="formError">Something went wrong sending that — please try again, or call us directly at <a href="tel:+12492026781">+1 (249) 202-6781</a>.</p>
           </form>
 
           <div class="form-success" id="formSuccess">
             <div class="check-big">✓</div>
             <h3>Got It — We're On It.</h3>
-            <p>Thanks for reaching out. We reply within one business day — if it's urgent, call or email us directly using the details on this page.</p>
+            <p>Thanks for reaching out. We reply within one business day — if it's urgent, call us directly using the number on this page.</p>
           </div>
         </div>
 
         <div class="reveal">
           <div class="contact-info-card">
             <h4>Direct Line</h4>
-            <a class="contact-link" href="mailto:hello@hkbgroup.ai">hello@hkbgroup.ai</a>
             <a class="contact-link" href="tel:+12492026781">+1 (249) 202-6781</a>
             <p class="note">Prefer talking it through first? Call the number above — someone (or something) is always on shift.</p>
           </div>
@@ -720,14 +726,14 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
           <div class="contact-info-card">
             <h4>Follow Along</h4>
             <div class="social-row">
-              <a href="#" class="social-icon" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/company/hkb-groups" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="4"/><line x1="7.5" y1="10" x2="7.5" y2="17"/><circle cx="7.5" cy="7" r="0.6" fill="currentColor" stroke="none"/><path d="M12 17v-4.5c0-1.4 1-2.5 2.4-2.5s2.4 1.1 2.4 2.5V17"/><line x1="12" y1="10" x2="12" y2="17"/></svg>
               </a>
-              <a href="#" class="social-icon" aria-label="X (Twitter)">
+              <a href="https://x.com/hkbgroups" class="social-icon" aria-label="X (Twitter)" target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
               </a>
-              <a href="#" class="social-icon" aria-label="Instagram">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="0.6" fill="currentColor" stroke="none"/></svg>
+              <a href="https://www.facebook.com/profile.php?id=61592214676602" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
               </a>
             </div>
           </div>
@@ -747,14 +753,14 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
       <a href="index.html" class="logo"><span class="logo-dot"></span>HKB<span class="logo-sub">GROUP</span></a>
       <p>HKB Group designs and builds AI automations, voice agents, and autonomous AI systems for ambitious businesses.</p>
       <div class="social-row">
-        <a href="#" class="social-icon" aria-label="LinkedIn">
+        <a href="https://www.linkedin.com/company/hkb-groups" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="4"/><line x1="7.5" y1="10" x2="7.5" y2="17"/><circle cx="7.5" cy="7" r="0.6" fill="currentColor" stroke="none"/><path d="M12 17v-4.5c0-1.4 1-2.5 2.4-2.5s2.4 1.1 2.4 2.5V17"/><line x1="12" y1="10" x2="12" y2="17"/></svg>
         </a>
-        <a href="#" class="social-icon" aria-label="X (Twitter)">
+        <a href="https://x.com/hkbgroups" class="social-icon" aria-label="X (Twitter)" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
         </a>
-        <a href="#" class="social-icon" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="0.6" fill="currentColor" stroke="none"/></svg>
+        <a href="https://www.facebook.com/profile.php?id=61592214676602" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
         </a>
       </div>
     </div>
@@ -775,7 +781,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
       <div class="footer-col">
         <h4>Get In Touch</h4>
         <a href="contact.html">Contact Us</a>
-        <a href="mailto:hello@hkbgroup.ai">hello@hkbgroup.ai</a>
         <a href="tel:+12492026781">+1 (249) 202-6781</a>
       </div>
     </div>
@@ -977,10 +982,48 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
     var form = document.getElementById('contactForm');
     if (!form) return;
     var successBox = document.getElementById('formSuccess');
+    var errorBox = document.getElementById('formError');
+    var submitBtn = form.querySelector('button[type="submit"]');
+    var submitLabel = submitBtn ? submitBtn.innerHTML : '';
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      form.style.display = 'none';
-      if (successBox) successBox.classList.add('is-visible');
+
+      // Honeypot: if this hidden field got filled in, it's a bot — pretend success, send nothing.
+      var honeypot = form.querySelector('input[name="botcheck"]');
+      if (honeypot && honeypot.checked) {
+        form.style.display = 'none';
+        if (successBox) successBox.classList.add('is-visible');
+        return;
+      }
+
+      if (errorBox) errorBox.classList.remove('is-visible');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
+      }
+
+      fetch(form.action, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.success) {
+            form.style.display = 'none';
+            if (successBox) successBox.classList.add('is-visible');
+          } else {
+            throw new Error(data.message || 'Submission failed');
+          }
+        })
+        .catch(function () {
+          if (errorBox) errorBox.classList.add('is-visible');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = submitLabel;
+          }
+        });
     });
   }
 
